@@ -10,7 +10,7 @@ you can check the nginx-sample folder to get started with nginx.
 - 🛠️ Automated build process
 - 📦 Easily install dependencies
 - 🤖 Build Nginx with VTS module
-- 🔄 Using the latest Nginx version (1.24)
+- 🔄 Using the latest Nginx version (1.25.3)
 
 <br>
 <img src="src/scr1.png" /></br>
@@ -30,6 +30,6 @@ you can check the nginx-sample folder to get started with nginx.
 2. build locally with builder.sh or a docker image with Dockerfile
    ```
    ./builder.sh
-   docker build -t company/nginx-vts:1.24 .
+   docker build -t company/nginx-vts:1.25.3 .
    ```
    
