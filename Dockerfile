@@ -1,21 +1,31 @@
-FROM ubuntu:latest
+FROM nginx:1.25.3-bookworm
 
 # Install required dependencies
+USER root
 RUN apt-get update \
-    && apt install -y git wget build-essential libpcre3 libpcre3-dev libssl-dev zlib1g-dev libpcre2-dev libxml2-dev libxslt1-dev libgd-dev curl gnupg2 ca-certificates lsb-release ubuntu-keyring \
-    && curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null \
-    && echo "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu $(lsb_release -cs) nginx" | tee /etc/apt/sources.list.d/nginx.list \
-    && apt-get update \
-    && apt-get install -y nginx
+    && apt install -y --no-install-recommends --no-install-suggests \
+        git \
+        wget \
+        build-essential \
+        libgd-dev \
+        libpcre2-dev \
+        libpcre3 \
+        libpcre3-dev \
+        libssl-dev \
+        libxml2-dev \
+        libxslt1-dev \
+        zlib1g-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Download and compile NGINX from source
 WORKDIR /opt
-RUN wget http://nginx.org/download/nginx-1.24.0.tar.gz \
-    && tar axf nginx-1.24.0.tar.gz \
+RUN wget https://nginx.org/download/nginx-1.25.3.tar.gz \
+    && tar axf nginx-1.25.3.tar.gz \
     && git clone https://github.com/openresty/headers-more-nginx-module.git \
     && git clone https://github.com/vozlt/nginx-module-vts.git \
     && mkdir -p /var/lib/nginx/body \ 
-    && cd nginx-1.24.0 \
+    && cd nginx-1.25.3 \
     && ./configure --with-cc-opt='-g -O2 -fdebug-prefix-map=/build/nginx-lUTckl/nginx-1.18.0=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Wdate-time -D_FORTIFY_SOURCE=2' \
                    --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -fPIC' \
                    --with-ld-opt=-Wl,-export-dynamic \
@@ -56,10 +66,11 @@ RUN wget http://nginx.org/download/nginx-1.24.0.tar.gz \
                    --add-module=../headers-more-nginx-module \
                    --add-module=../nginx-module-vts \
     && make -j 12 \
-    && make install
+    && make install \
+    && rm -rf /opt/*
 
-# Expose the ports
-EXPOSE 80 443
-
-# Command to run NGINX
-CMD ["nginx", "-g", "daemon off;"]
+WORKDIR /etc/nginx/
+# RUN groupadd -r nginx && useradd -r -g nginx nginx
+# USER nginx
+COPY ./nginx-sample/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx-sample/vts.conf /etc/nginx/conf.d/default.conf
