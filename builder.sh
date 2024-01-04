@@ -11,15 +11,15 @@ apt update && apt install nginx -y
 
 # Download NGINX source code
 cd /opt
-wget http://nginx.org/download/nginx-1.24.0.tar.gz
-tar axf nginx-1.24.0.tar.gz
+wget http://nginx.org/download/nginx-1.25.3.tar.gz
+tar axf nginx-1.25.3.tar.gz
 
 # Clone additional modules
 git clone https://github.com/openresty/headers-more-nginx-module.git
 git clone https://github.com/vozlt/nginx-module-vts.git
 
 # Build and install NGINX from source with specified configuration
-cd nginx-1.24.0
+cd nginx-1.25.3
 ./configure --with-cc-opt='-g -O2 -fdebug-prefix-map=/build/nginx-lUTckl/nginx-1.18.0=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Wdate-time -D_FORTIFY_SOURCE=2' \
             --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -fPIC' \
             --with-ld-opt=-Wl,-export-dynamic \
