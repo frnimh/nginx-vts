@@ -72,5 +72,5 @@ RUN wget https://nginx.org/download/nginx-1.25.3.tar.gz \
 WORKDIR /etc/nginx/
 # RUN groupadd -r nginx && useradd -r -g nginx nginx
 # USER nginx
-COPY ./nginx-sample/nginx.conf /etc/nginx/nginx.conf
-COPY ./nginx-sample/vts.conf /etc/nginx/conf.d/default.conf
+COPY ./defaul-configs/nginx.conf /etc/nginx/nginx.conf
+COPY ./defaul-configs/default.conf /etc/nginx/conf.d/default.conf
