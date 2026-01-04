@@ -20,12 +20,12 @@ RUN apt-get update \
 
 # Download and compile NGINX from source
 WORKDIR /opt
-RUN wget https://nginx.org/download/nginx-1.25.3.tar.gz \
-    && tar axf nginx-1.25.3.tar.gz \
+RUN wget https://nginx.org/download/nginx-1.29.4.tar.gz \
+    && tar axf nginx-1.29.4.tar.gz \
     && git clone https://github.com/openresty/headers-more-nginx-module.git \
     && git clone https://github.com/vozlt/nginx-module-vts.git \
     && mkdir -p /var/lib/nginx/body \ 
-    && cd nginx-1.25.3 \
+    && cd nginx-1.29.4 \
     && ./configure --with-cc-opt='-g -O2 -fdebug-prefix-map=/build/nginx-lUTckl/nginx-1.18.0=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Wdate-time -D_FORTIFY_SOURCE=2' \
                    --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -fPIC' \
                    --with-ld-opt=-Wl,-export-dynamic \
