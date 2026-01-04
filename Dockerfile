@@ -1,4 +1,4 @@
-FROM nginx:1.25.3-bookworm
+FROM nginx:1.29.4-trixie
 
 # Install required dependencies
 USER root
